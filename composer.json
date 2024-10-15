@@ -1,0 +1,43 @@
+{
+    "name": "khophim8k/kho8k-core",
+    "description": "Kho8k's core features",
+    "type": "library",
+    "authors": [
+        {
+            "name": "khophim8k",
+            "email": "khophim8k.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^6|^7|^8",
+        "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
+        "hacoidev/laravel-caching-model": "^1.0.0",
+        "hacoidev/settings": "^1.0.0",
+        "kho8k/crud": "v1.0.0",
+        "hacoidev/permissionmanager": "^1.0.0",
+        "spatie/laravel-sitemap": "^5.8",
+        "artesaos/seotools": "^v0.22.1"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hieudangdev/hit-crud.git"
+        }
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kho8k\\Core\\": "src/",
+            "Kho8k\\Core\\Database\\Factories\\": "database/factories/",
+            "Kho8k\\Core\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kho8k\\Core\\Kho8kServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
