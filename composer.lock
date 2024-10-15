@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00f1ed01a677e98e77314703f59c25fa",
+    "content-hash": "7e8a362a04e047cb9b946652bd22d388",
     "packages": [
         {
             "name": "artesaos/seotools",
@@ -1849,17 +1849,17 @@
             "time": "2022-05-21T17:30:32+00:00"
         },
         {
-            "name": "kho8k/crud",
-            "version": "v1.0.0",
+            "name": "khophim8k/crud",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hieudangdev/hit-crud.git",
-                "reference": "ca2f489da70659960da005467b096b98d885f5c7"
+                "reference": "2777eaf14690d9012314d9b3b0ec31b758d095e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hieudangdev/hit-crud/zipball/ca2f489da70659960da005467b096b98d885f5c7",
-                "reference": "ca2f489da70659960da005467b096b98d885f5c7",
+                "url": "https://api.github.com/repos/hieudangdev/hit-crud/zipball/2777eaf14690d9012314d9b3b0ec31b758d095e6",
+                "reference": "2777eaf14690d9012314d9b3b0ec31b758d095e6",
                 "shasum": ""
             },
             "require": {
@@ -1900,28 +1900,7 @@
                     "Backpack\\CRUD\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Backpack\\CRUD\\Tests\\": "tests"
-                },
-                "files": [
-                    "src/helpers.php"
-                ],
-                "exclude-from-classmap": [
-                    "**/config"
-                ]
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit --testdox"
-                ],
-                "test-failing": [
-                    "vendor/bin/phpunit --order-by=defects --stop-on-failure"
-                ],
-                "test-coverage": [
-                    "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1936,29 +1915,29 @@
             "description": "Quickly build an admin interfaces using Laravel, CoreUI, Bootstrap and jQuery.",
             "homepage": "https://github.com/laravel-backpack/CRUD",
             "keywords": [
-                "BREAD",
-                "CMS",
-                "CRUD",
-                "admin interface",
+                "Admin Interface",
+                "Content management system",
                 "admin panel",
                 "admin panel for laravel",
                 "backpack",
                 "base",
                 "bootstrap 4 admin panel laravel",
+                "bread",
+                "cms",
                 "content management framework",
-                "content management system",
                 "coreui for laravel",
                 "create",
+                "crud",
                 "delete",
                 "laravel admin",
                 "read",
                 "update"
             ],
             "support": {
-                "source": "https://github.com/hieudangdev/hit-crud/tree/v1.0.0",
-                "issues": "https://github.com/hieudangdev/hit-crud/issues"
+                "issues": "https://github.com/hieudangdev/hit-crud/issues",
+                "source": "https://github.com/hieudangdev/hit-crud/tree/v2.0.0"
             },
-            "time": "2024-10-15T03:36:23+00:00"
+            "time": "2024-10-15T08:27:28+00:00"
         },
         {
             "name": "khophim8k/laravel-caching-model",
@@ -2003,20 +1982,20 @@
         },
         {
             "name": "khophim8k/permissionmanager",
-            "version": "v2.0.0",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hieudangdev/hit-permissionmanager.git",
-                "reference": "8bf4ddad991d4335fb761704ea75ba6ceb5a01d1"
+                "reference": "2c7d71f8d67ab1dedda371116dd22a171661f6ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hieudangdev/hit-permissionmanager/zipball/8bf4ddad991d4335fb761704ea75ba6ceb5a01d1",
-                "reference": "8bf4ddad991d4335fb761704ea75ba6ceb5a01d1",
+                "url": "https://api.github.com/repos/hieudangdev/hit-permissionmanager/zipball/2c7d71f8d67ab1dedda371116dd22a171661f6ce",
+                "reference": "2c7d71f8d67ab1dedda371116dd22a171661f6ce",
                 "shasum": ""
             },
             "require": {
-                "kho8k/crud": "^1.0",
+                "khophim8k/crud": "^2.0",
                 "spatie/laravel-permission": "^5.0|^4.0|^3.0"
             },
             "require-dev": {
@@ -2074,26 +2053,26 @@
             ],
             "support": {
                 "issues": "https://github.com/hieudangdev/hit-permissionmanager/issues",
-                "source": "https://github.com/hieudangdev/hit-permissionmanager/tree/v2.0.0"
+                "source": "https://github.com/hieudangdev/hit-permissionmanager/tree/v2.0.2"
             },
-            "time": "2024-10-15T06:39:33+00:00"
+            "time": "2024-10-15T08:44:32+00:00"
         },
         {
             "name": "khophim8k/settings",
-            "version": "v2.0.0",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hieudangdev/hit-settings.git",
-                "reference": "13f77c92dce0c18bf2d2efe7c957395a45d1514e"
+                "reference": "7a00acc43c3fb730bb697939a012648b7a87b367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hieudangdev/hit-settings/zipball/13f77c92dce0c18bf2d2efe7c957395a45d1514e",
-                "reference": "13f77c92dce0c18bf2d2efe7c957395a45d1514e",
+                "url": "https://api.github.com/repos/hieudangdev/hit-settings/zipball/7a00acc43c3fb730bb697939a012648b7a87b367",
+                "reference": "7a00acc43c3fb730bb697939a012648b7a87b367",
                 "shasum": ""
             },
             "require": {
-                "kho8k/crud": "^1.0",
+                "khophim8k/crud": "^2.0",
                 "khophim8k/laravel-caching-model": "^1.1"
             },
             "require-dev": {
@@ -2143,9 +2122,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hieudangdev/hit-settings/issues",
-                "source": "https://github.com/hieudangdev/hit-settings/tree/v2.0.0"
+                "source": "https://github.com/hieudangdev/hit-settings/tree/v2.0.2"
             },
-            "time": "2024-10-15T07:00:59+00:00"
+            "time": "2024-10-15T08:49:53+00:00"
         },
         {
             "name": "laravel/framework",

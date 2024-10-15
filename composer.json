@@ -16,7 +16,7 @@
         "khophim8k/laravel-caching-model": "^1.1",
         "khophim8k/permissionmanager": "^2.0",
         "khophim8k/settings": "^2.0",
-        "kho8k/crud": "^1.0"
+        "khophim8k/crud": "^2.0"
     },
     "license": "MIT",
     "autoload": {
