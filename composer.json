@@ -11,12 +11,12 @@
     "require": {
         "laravel/framework": "^6|^7|^8",
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
-        "hacoidev/laravel-caching-model": "^1.0.0",
-        "hacoidev/settings": "^1.0.0",
-        "kho8k/crud": "v1.0.0",
-        "hacoidev/permissionmanager": "^1.0.0",
+        "kho8k/crud": "^1.0.0",
         "spatie/laravel-sitemap": "^5.8",
-        "artesaos/seotools": "^v0.22.1"
+        "artesaos/seotools": "^v0.22.1",
+        "khophim8k/laravel-caching-model": "^1.1",
+        "khophim8k/permissionmanager": "^2.0",
+        "khophim8k/settings": "^2.0"
     },
     "repositories": [
         {
