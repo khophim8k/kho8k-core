@@ -111,8 +111,8 @@ class Kho8kServiceProvider extends ServiceProvider
     protected function publishFiles()
     {
         $backpack_menu_contents_view = [
-            __DIR__ . '/../resources/views/core/base/'  => resource_path('views/vendor/hacoidev/base/'),
-            __DIR__ . '/../resources/views/core/crud/'      => resource_path('views/vendor/hacoidev/crud/'),
+            __DIR__ . '/../resources/views/core/base/'  => resource_path('views/vendor/khophim8k/base/'),
+            __DIR__ . '/../resources/views/core/crud/'      => resource_path('views/vendor/khophim8k/crud/'),
         ];
 
         $players = [
@@ -144,7 +144,7 @@ class Kho8kServiceProvider extends ServiceProvider
             \Backpack\CRUD\app\Http\Middleware\UseBackpackAuthGuardInsteadOfDefaultAuthGuard::class,
         ])]);
 
-        config(['cachebusting_string' => \PackageVersions\Versions::getVersion('hacoidev/crud')]);
+        config(['cachebusting_string' => \PackageVersions\Versions::getVersion('khophim8k/crud')]);
 
         config(['backpack.base.project_logo' => '<b>Kho8k</b>CMS']);
         config(['backpack.base.developer_name' => 'khophim8k']);
