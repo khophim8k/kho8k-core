@@ -3,8 +3,8 @@
 namespace Kho8k\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Hacoidev\CachingModel\Contracts\Cacheable;
-use Hacoidev\CachingModel\HasCache;
+use Khophim8k\CachingModel\Contracts\Cacheable;
+use Khophim8k\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Kho8k\Core\Traits\HasFactory;

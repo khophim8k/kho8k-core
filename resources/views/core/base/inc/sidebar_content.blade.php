@@ -53,7 +53,12 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting/group/generals/edit') }}'><i
                     class='nav-icon la la-wrench'></i>
                 <span>General</span></a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting/group/metas/edit') }}'><i
+
+        <li class='nav-item'><a class='nav-link' href='/ckfinder/browser'><i
+                    class='nav-icon la la-wrench'></i>
+                <span>image</span></a></li>
+
+        <li class='nav-item g'><a class='nav-link' href='{{ backpack_url('setting/group/metas/edit') }}'><i
                     class='nav-icon la la-chevron-circle-up'></i>
                 <span>SEO</span></a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting/group/jwplayer/edit') }}'><i

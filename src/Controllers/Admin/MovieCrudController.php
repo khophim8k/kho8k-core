@@ -244,7 +244,7 @@ class MovieCrudController extends CrudController
             'class' => 'form-group col-md-4'
         ], 'attributes' => ['placeholder' => '12'], 'tab' => 'Thông tin phim']);
 
-        CRUD::addField(['name' => 'language', 'label' => 'Ngôn ngữ', 'type' => 'text', 'wrapperAttributes' => [
+        CRUD::addField(['name' => 'language', 'label' => 'nhãn', 'type' => 'text', 'wrapperAttributes' => [
             'class' => 'form-group col-md-4'
         ], 'attributes' => ['placeholder' => 'Tiếng Việt'], 'tab' => 'Thông tin phim']);
 
