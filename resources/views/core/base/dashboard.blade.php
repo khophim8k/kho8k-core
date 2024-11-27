@@ -11,8 +11,9 @@
                 Phiên bản: <span class="text-danger text-break">' .
                 config('kho8k.version') .
                 '</span><br/>
-                Trang chủ: <a href="https://ophimcms.com">Khophim8kCMS.Com</a><br/>
-                Dữ liệu phim miễn phí: <a href="https://Khophim8k.cc">Ổ Phim</a>
+                Trang chủ: <a href="https://Khophim8kCMS.com">Khophim8kCMS.Com</a><br/>
+                Liên hệ : <a href="https://t.me/quinzz99">Telegram</a><br/>
+                Dữ liệu phim miễn phí: <a href="https://Khophim8kCMS.cc">api Phim</a>
             ',
             'close_button' => true, // show close button or not
         ],

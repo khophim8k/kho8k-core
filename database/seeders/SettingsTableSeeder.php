@@ -45,6 +45,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'textarea',
                 ]),
+
                 'active'      => 0,
             ],
             [

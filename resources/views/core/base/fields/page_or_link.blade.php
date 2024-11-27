@@ -67,6 +67,7 @@
                     for="{{ $field['name']['link'] }}"
                     required
 
+
                     @if (isset($entry) && $entry->{$field['name']['type']} !== 'external_link')
                         disabled="disabled"
                     @endif

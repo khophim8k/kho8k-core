@@ -19,6 +19,9 @@ class CatalogCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Kho8k\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -43,7 +46,7 @@ class CatalogCrudController extends CrudController
         $this->authorize('browse', Catalog::class);
 
         CRUD::addButtonFromModelFunction('line', 'open_view', 'openView', 'beginning');
-
+          // Thêm checkbox cho phép chọn nhiều dòng
         CRUD::column('name')->label('Tên')->type('text');
         CRUD::column('slug')->label('Đường dẫn tĩnh')->type('text');
         CRUD::column('paginate')->label('Item per page')->type('number');
@@ -51,6 +54,10 @@ class CatalogCrudController extends CrudController
         CRUD::column('seo_title')->label('SEO Title')->type('text');
         CRUD::column('seo_des')->label('SEO Description')->type('text');
         CRUD::column('seo_key')->label('SEO Keyword')->type('text');
+
+        // Bật chức năng Bulk Actions
+        $this->crud->enableBulkActions();
+
     }
 
     /**
@@ -85,10 +92,15 @@ class CatalogCrudController extends CrudController
         $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
 
         $this->setupCreateOperation();
+
     }
 
     protected function setupDeleteOperation()
     {
         $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+    }
+    protected function setupBulkDeleteOperation()
+    {
+        // Không cần cấu hình thêm, BulkDeleteOperation sẽ tự động thêm nút "Xóa hàng loạt"
     }
 }

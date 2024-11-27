@@ -19,7 +19,9 @@ class RegionCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use \Kho8k\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -47,11 +49,13 @@ class RegionCrudController extends CrudController
          * - CRUD::column('price')->label('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
+
         CRUD::column('name')->label('Tên khu vực')->type('text');
         CRUD::column('slug')->label('Đường dẫn tĩnh')->type('text');
         CRUD::column('seo_title')->label('SEO Title')->type('text');
         CRUD::column('seo_des')->label('SEO Description')->type('text');
         CRUD::column('seo_key')->label('SEO Keyword')->type('text');
+        $this->crud->enableBulkActions();
     }
 
     /**

@@ -19,7 +19,9 @@ class ActorCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use \Kho8k\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -46,6 +48,7 @@ class ActorCrudController extends CrudController
         CRUD::addColumn(['name' => 'slug', 'label' => 'Đường dẫn tĩnh', 'type' => 'text']);
         CRUD::addColumn(['name' => 'gender', 'label' => 'Giới tính', 'type' => 'text']);
         CRUD::addColumn(['name' => 'image', 'label' => 'Ảnh', 'type' => 'image']);
+        $this->crud->enableBulkActions();
     }
 
     /**

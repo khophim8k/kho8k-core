@@ -186,7 +186,9 @@ class MovieCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'thumb_url', 'label' => 'Ảnh thumb', 'type' => 'image',
+            'name' => 'thumb_url',
+            'label' => 'Ảnh thumb',
+            'type' => 'image',
             'height' => '100px',
             'width'  => '68px',
         ]);
@@ -223,7 +225,11 @@ class MovieCrudController extends CrudController
         ], 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'slug', 'label' => 'Đường dẫn tĩnh', 'type' => 'text', 'tab' => 'Thông tin phim']);
         CRUD::addField([
-            'name' => 'thumb_url', 'label' => 'Ảnh Thumb', 'type' => 'ckfinder', 'preview' => ['width' => 'auto', 'height' => '340px'], 'tab' => 'Thông tin phim'
+            'name' => 'thumb_url',
+            'label' => 'Ảnh Thumb',
+            'type' => 'ckfinder',
+            'preview' => ['width' => 'auto', 'height' => '340px'],
+            'tab' => 'Thông tin phim'
         ]);
         CRUD::addField(['name' => 'poster_url', 'label' => 'Ảnh Poster', 'type' => 'ckfinder', 'preview' => ['width' => 'auto', 'height' => '340px'], 'tab' => 'Thông tin phim']);
 
@@ -272,7 +278,7 @@ class MovieCrudController extends CrudController
             'tab' => 'Danh sách tập phim'
         ],);
 
-        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => collect(config('kho8k.updaters', []))->pluck('name', 'handler')->toArray(), 'tab' => 'Cập nhật']);
+        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => Movie::pluck('update_handler', 'update_handler')->toArray(), 'tab' => 'Cập nhật']);
         CRUD::addField(['name' => 'update_identity', 'label' => 'ID cập nhật', 'type' => 'text', 'tab' => 'Cập nhật']);
 
         CRUD::addField(['name' => 'is_shown_in_theater', 'label' => 'Phim chiếu rạp', 'type' => 'boolean', 'tab' => 'Khác']);

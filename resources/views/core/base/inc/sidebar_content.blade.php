@@ -54,7 +54,7 @@
                     class='nav-icon la la-wrench'></i>
                 <span>General</span></a></li>
 
-        <li class='nav-item'><a class='nav-link' href='/ckfinder/browser'><i
+        <li class='nav-item'><a class='nav-link' target="_blank" href='/ckfinder/browser'><i
                     class='nav-icon la la-wrench'></i>
                 <span>image</span></a></li>
 

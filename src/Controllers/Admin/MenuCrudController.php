@@ -6,6 +6,8 @@ use Kho8k\CoreHttp\Requests\MenuRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Kho8k\Core\Models\Menu;
+use Kho8k\Core\Models\Category;
+use Kho8k\Core\Models\Region;
 
 /**
  * Class MenuCrudController
@@ -84,14 +86,69 @@ class MenuCrudController extends CrudController
             Menu::class
         ]);
 
+        // Thêm trường chọn kiểu loại liên kết
+        $this->crud->addField([
+            'name' => 'category',
+            'label' => 'Select Category',
+            'type' => 'select_from_array',
+            'options' => ['' => '--- Select ---'] + Category::pluck('name', 'slug')->toArray(), // Thêm tùy chọn rỗng
+            'allows_null' => true,
+            'default' => '',
+        ]);
+        $this->crud->addField([
+            'name' => 'countrys',
+            'label' => 'Select Countrys',
+            'type' => 'select_from_array',
+            'options' => ['' => '--- Select ---'] +Region::pluck('name', 'slug')->toArray(), // Tạo danh sách với slug làm value, name làm label
+            'allows_null' => true,
+            'default' => '',
+        ]);
         $this->crud->addField([
             'name' => ['type', 'link', 'internal_link'],
             'label' => 'Type',
             'type' => 'page_or_link',
         ]);
+        // Thêm trường chọn thể loại hoặc quốc gia
+
+
+        // Script xử lý tự động internal_link dựa vào lựa chọn của người dùng
+        $this->crud->addField([
+            'name' => 'custom_script',
+            'type' => 'custom_html',
+            'value' => '<script>
+            document.querySelector(".external_link input").disabled=true;
+             var hiddenInput = document.getElementsByName("link")[0];
+
+            document.querySelector("select[name=\'category\']").addEventListener("change", function() {
+            var selectedValue = this.value;
+            var countrySelect = document.querySelector("select[name=\'countrys\']");
+            var internalLinkInput = document.querySelector(".internal_link input");
+
+            // Đặt countrySelect về mặc định nếu category được chọn
+            if (selectedValue) {
+                countrySelect.selectedIndex = 0; // Chọn tùy chọn rỗng
+                internalLinkInput.value =  "/the-loai/" +selectedValue;
+                hiddenInput.value=  "/the-loai/" +selectedValue;
+            }
+        });
+
+        document.querySelector("select[name=\'countrys\']").addEventListener("change", function() {
+            var selectedValue = this.value;
+            var categorySelect = document.querySelector("select[name=\'category\']");
+            var internalLinkInput = document.querySelector(".internal_link input");
+
+            // Đặt categorySelect về mặc định nếu country được chọn
+            if (selectedValue) {
+                categorySelect.selectedIndex = 0; // Chọn tùy chọn rỗng
+                internalLinkInput.value =  "/quoc-gia/"+selectedValue; // Cập nhật input với value của country
+                  hiddenInput.value= "/quoc-gia/"+selectedValue;
+            }
+        });
+        </script>'
+        ]);
     }
 
-        /**
+    /**
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
