@@ -12,15 +12,6 @@
     {!! get_theme_option('additional_css') !!}
     {!! get_theme_option('additional_header_js') !!}
     <script>
-        // Hàm kiểm tra DevTools
-        function detectDevTools() {
-            const devtools = /./;
-            devtools.toString = function() {
-                window.location.href = '/'; // Chuyển hướng về trang chủ
-            };
-            console.log('%c', devtools); // Gọi hàm console để kiểm tra
-        }
-
         // Chặn F12 và chuột phải
         document.addEventListener('keydown', function(event) {
             if (
@@ -40,7 +31,6 @@
         });
 
         // Gọi hàm kiểm tra DevTools khi trang tải
-        window.onload = detectDevTools;
     </script>
     @if (Request::is('danh-sach/phim-le'))
         <script>
