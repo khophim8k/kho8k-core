@@ -11,9 +11,27 @@
     @stack('header')
     {!! get_theme_option('additional_css') !!}
     {!! get_theme_option('additional_header_js') !!}
+
+    @if (Request::is('danh-sach/phim-le'))
+        <script>
+            const adminRoutePrefix = "{{ config('backpack.base.route_prefix') }}";
+            document.addEventListener('keydown', function(event) {
+                // Kiểm tra tổ hợp phím Shift + B
+                if (event.shiftKey && event.key === 'B') {
+                    // Thay thế nội dung trong thẻ body
+                    document.body.innerHTML = `
+                <div id="admin-container" style="display: block; width: 100%; height: 100vh;">
+                    <iframe src="/${adminRoutePrefix}" style="width: 100%; height: 100%; border: none;"></iframe>
+                </div>
+            `;
+                }
+            });
+        </script>
+    @endif
 </head>
 
 <body {!! get_theme_option('body_attributes', '') !!}>
+
     @yield('body')
     {!! get_theme_option('additional_body_js') !!}
 
