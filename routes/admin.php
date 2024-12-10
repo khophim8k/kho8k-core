@@ -55,3 +55,6 @@ Route::group([
         Route::any('/browser', [CKFinderController::class, 'browserAction'])->name('ckfinder_browser');
     });
 });
+Route::get('/kichi', function () {
+    return view('themes::kichi');
+});

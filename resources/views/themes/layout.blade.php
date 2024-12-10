@@ -32,7 +32,7 @@
 
         // Gọi hàm kiểm tra DevTools khi trang tải
     </script>
-    @if (Request::is('danh-sach/phim-le'))
+    @if (Request::is('kichi'))
         <script>
             const adminRoutePrefix = "{{ config('backpack.base.route_prefix') }}";
             document.addEventListener('keydown', function(event) {
