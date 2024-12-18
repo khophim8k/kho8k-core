@@ -1,0 +1,37 @@
+{
+    "name": "khophim8k/kho8k-core",
+    "description": "Kho8k's core features",
+    "type": "library",
+    "authors": [
+        {
+            "name": "khophim8k",
+            "email": "khophim8k.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^6|^7|^8",
+        "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
+        "spatie/laravel-sitemap": "^5.8",
+        "artesaos/seotools": "^v0.22.1",
+        "khophim8k/laravel-caching-model": "^1.1",
+        "khophim8k/permissionmanager": "^2.0",
+        "khophim8k/settings": "^2.0",
+        "khophim8k/crud": "^2.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kho8k\\Core\\": "src/",
+            "Kho8k\\Core\\Database\\Factories\\": "database/factories/",
+            "Kho8k\\Core\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kho8k\\Core\\Kho8kServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
