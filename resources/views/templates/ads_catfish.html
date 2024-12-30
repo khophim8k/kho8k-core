@@ -1,0 +1,48 @@
+<div id="catfish" class="ads_catfish">
+    <button class="catfish-bottom-close" id="catfish-bottom-close">×</button>
+    <div class="banner-catfish" id="container-ads">{{a_tag}}</div>
+</div>
+
+<script>
+    document
+        .querySelector(".catfish-bottom-close")
+        .addEventListener("click", function () {
+            document.querySelector(".ads_catfish").style.display = "none";
+        });
+</script>
+
+<style>
+    .ads_catfish {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 222;
+    }
+
+    .banner-catfish {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
+        margin: 0 auto;
+        text-align: center;
+        overflow: visible;
+    }
+
+    .banner-catfish img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .catfish-bottom-close {
+        margin: 0 auto;
+        display: block;
+        background-color: #bc1d1d;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #fff;
+    }
+</style>
