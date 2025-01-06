@@ -1,0 +1,58 @@
+<div class="ads_popup">
+    <div class="banner-preload-close">X</div>
+    <div class="banner_popup">{{a_tag}}</div>
+</div>
+
+<script>
+    document
+        .querySelector(".banner-preload-close")
+        .addEventListener("click", function () {
+            document.querySelector(".ads_popup").style.display = "none";
+        });
+    document
+        .querySelector(".banner_popup")
+        .addEventListener("click", function () {
+            document.querySelector(".ads_popup").style.display = "none";
+        });
+</script>
+
+<style>
+    .ads_popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        z-index: 1000;
+    }
+    .banner_popup {
+        position: absolute;
+        width: 100vw;
+        margin: 0 auto;
+        cursor: pointer;
+    }
+    .banner_popup > a {
+        max-width: 400px;
+        height: auto;
+        margin: calc(50vh - 200px) auto;
+        display: block;
+        position: relative; /* Đảm bảo thẻ a là relative để căn chỉnh nút X */
+    }
+    .banner-preload-close {
+        position: absolute;
+        top: 25%; /* Đẩy lên trên thẻ a */
+        left: 50%; /* Căn giữa theo chiều ngang */
+        transform: translateX(-50%); /* Dịch chuyển để nút nằm chính giữa */
+        text-align: center;
+        width: 40px;
+        padding: 3px 10px;
+        font-size: 16px;
+        color: #dadada;
+        background-color: #030303;
+        border: 1px solid #dadada;
+        box-shadow: 0 0 5px #fff;
+        opacity: 1;
+        cursor: pointer;
+    }
+</style>
