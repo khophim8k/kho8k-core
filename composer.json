@@ -13,10 +13,10 @@
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
         "spatie/laravel-sitemap": "^5.9",
         "artesaos/seotools": "^v0.22.1",
-        "khophim8k/laravel-caching-model": "^1.1",
-        "khophim8k/permissionmanager": "^2.0",
-        "khophim8k/settings": "^2.0",
-        "khophim8k/crud": "^2.1"
+        "khophim8k/laravel-caching-model": "*",
+        "khophim8k/permissionmanager": "*",
+        "khophim8k/settings": "*",
+        "khophim8k/crud": "*"
     },
     "license": "MIT",
     "autoload": {
