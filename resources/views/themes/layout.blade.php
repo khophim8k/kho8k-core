@@ -59,5 +59,39 @@
     @stack('scripts')
     {!! get_theme_option('additional_footer_js') !!}
 </body>
+<script>
+    const popupClosed = sessionStorage.getItem("popupClosed");
+        // Nếu popup chưa bị đóng, hiển thị popup
 
+
+           if (popupClosed=='true') {
+               document.querySelector(".ads_popup").style.display = "none"; // ẩn popup
+               document.querySelector(".ads_catfish").style.display = "none";
+           } else {
+               document.querySelector(".ads_popup").style.display = "block"; // Hiển thị popup
+               document.querySelector(".ads_catfish").style.display = "block";
+           }
+
+           if (document.querySelector(".ads_popup") || document.querySelector(".ads_catfish")) {
+       document
+           .querySelector(".banner-preload-close")
+           .addEventListener("click", function () {
+               // Khi người dùng đóng popup, lưu thời gian đóng vào sessionStorage
+               sessionStorage.setItem("popupClosed", "true");
+               document.querySelector(".ads_popup").style.display = "none";
+           });
+           document
+           .querySelector(".catfish-bottom-close")
+           .addEventListener("click", function () {
+               sessionStorage.setItem("popupClosed", "true");
+               document.querySelector(".ads_catfish").style.display = "none";
+           });
+       document
+           .querySelector(".banner_popup")
+           .addEventListener("click", function () {
+               sessionStorage.setItem("popupClosed", "true");
+               document.querySelector(".ads_popup").style.display = "none";
+           });
+       }
+   </script>
 </html>
