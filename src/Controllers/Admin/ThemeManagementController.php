@@ -57,7 +57,6 @@ class ThemeManagementController extends CrudController
             'uses'      => $controller . '@delete',
             'operation' => 'update',
         ]);
-
     }
 
     /**
@@ -259,9 +258,9 @@ class ThemeManagementController extends CrudController
         // Kiểm tra đầu vào
         $validator = Validator::make($request->all(), [
             'ads_header' => 'nullable|string',
-            'redirect_link' => 'nullable|string',
             'ads_catfish' => 'nullable|string',
             'ads_popup' => 'nullable|string',
+            'isStop' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -283,74 +282,64 @@ class ThemeManagementController extends CrudController
         // Lấy dữ liệu từ cột value
         $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
 
+        if ($request->input('isStop') == 'Stop') {
+            $value['ads_header'] = '';
+            $value['ads_catfish'] = '';
+
+            $theme->value = $value;
+            $theme->save();
+            Artisan::call('optimize:clear');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Ads stopped successfully.',
+            ]);
+        }
+
         // Hàm tạo thẻ <a>
-        $createATag = function ($link, $image) {
-            return <<<HTML
-                <a href="{$link}" target="_blank" rel="nofollow" data-wpel-link="external" aria-label="banner quảng cáo">
-                    {$image}
-                </a>
-                HTML;
+        $createATag = function ($adsHeaderdata) {
+            $aTags = '';
+            foreach ($adsHeaderdata as $bannerheader) {
+                $parts = explode('|', $bannerheader);
+                if (count($parts) === 2) {
+                    [$image, $link] = $parts;
+                    $aTags .= '<a href="' . $link . '" target="_blank" rel="nofollow" data-wpel-link="external" aria-label="banner quảng cáo">
+                                <img src="' . $image . '" alt="banner_ads" />
+                                </a>';
+                }
+            }
+
+            return $aTags;
         };
 
-        // Lấy redirect link
-        $redirectLink = $request->input('redirect_link', '');
 
         // Xử lý ads_header
-        if ($request->has('ads_header')) {
-            $adsHeaderdata = $request->input('ads_header');
-            if (!empty($value['ads_header']) && strpos($value['ads_header'], 'class="ads-header"') !== false) {
-                // Đã có dữ liệu -> Chèn thêm thẻ <a> mới
-                $newATag = $createATag($redirectLink, $adsHeaderdata);
-                $value['ads_header'] = preg_replace(
-                    '/(<div class="ads-header[^>]*">.*?)(<\/div>)/s',
-                    "$1$newATag$2",
-                    $value['ads_header']
-                );
-            } else {
-                // Chưa có dữ liệu -> Khởi tạo từ template
-                $adsHeaderTemplate = file_get_contents(app('template_banner') . 'ads_header.html');
-                $newATag = $createATag($redirectLink, $adsHeaderdata);
-                $value['ads_header'] = str_replace('{{a_tag}}', $newATag, $adsHeaderTemplate);
-            }
+
+        if (!empty($request->input('ads_header'))) {
+            $adsHeaderdata = explode("\n", $request->input('ads_header'));
+            $newATag = $createATag($adsHeaderdata);
+            $adsHeaderTemplate = file_get_contents(app('template_banner') . 'ads_header.html');
+            $value['ads_header'] = str_replace('{{a_tag}}', $newATag, $adsHeaderTemplate);
         }
 
         // Xử lý ads_catfish
-        if ($request->has('ads_catfish')) {
-            $adsCatfishData = $request->input('ads_catfish');
-            if (!empty($value['ads_catfish']) && strpos($value['ads_catfish'], 'class="ads_catfish"') !== false) {
-                // Đã có dữ liệu, chèn thêm <a> vào sau thẻ <a> cuối cùng trong div class="ads_catfish"
-                $newATag = $createATag($redirectLink, $adsCatfishData);
-                $value['ads_catfish'] = preg_replace(
-                    '/(<div class="banner-catfish[^>]*">.*?)(<\/div>)/s',
-                    "$1$newATag$2",
-                    $value['ads_catfish']
-                );
-            } else {
-                // Chưa có dữ liệu -> Khởi tạo từ template
-                $adsCatfishTemplate = file_get_contents(app('template_banner') . 'ads_catfish.html');
-                $newATag = $createATag($redirectLink, $adsCatfishData);
-                $value['ads_catfish'] = str_replace('{{a_tag}}', $newATag, $adsCatfishTemplate);
-            }
+        if (!empty($request->input('ads_catfish'))) {
+            $adsCatfishData = explode("\n", $request->input('ads_catfish'));
+            $newATag = $createATag($adsCatfishData);
+
+
+            $adsCatfishTemplate = file_get_contents(app('template_banner') . 'ads_catfish.html');
+            $value['ads_catfish'] = str_replace('{{a_tag}}', $newATag, $adsCatfishTemplate);
         }
 
-        // Xử lý ads_popup
-        if ($request->has('ads_popup')) {
-            $adsPopupData = $request->input('ads_popup');
-            if (!empty($value['ads_catfish']) && strpos($value['ads_catfish'], 'class="ads_popup"') !== false) {
-                // Đã có dữ liệu, chèn thêm <a> vào sau thẻ <a> cuối cùng trong div class="banner_popup"
-                $newATag = $createATag($redirectLink, $adsPopupData);
-                $value['ads_catfish'] = preg_replace(
-                    '/(<div class="banner_popup[^>]*">.*?)(<\/div>)/s',
-                    "$1$newATag$2",
-                    $value['ads_catfish']
-                );
-            } else {
-                // Chưa có dữ liệu -> Khởi tạo từ template
-                $adsPopupTemplate = file_get_contents(app('template_banner') . 'ads_popup.html');
-                $newATag = $createATag($redirectLink, $adsPopupData);
-                $value['ads_catfish'] .= str_replace('{{a_tag}}', $newATag, $adsPopupTemplate);
-            }
+        // // Xử lý ads_popup
+        if (!empty($request->input('ads_popup'))) {
+            $adsPopupData = explode("\n",  $request->input('ads_popup'));
+            $newATag = $createATag($adsPopupData);
+            $adsCatfishTemplate = file_get_contents(app('template_banner') . 'ads_popup.html');
+            $value['ads_catfish'] .= str_replace('{{a_tag}}', $newATag, $adsCatfishTemplate);
         }
+
+
         // Lưu lại giá trị mới vào theme
         $theme->value = $value;
         $theme->save();
@@ -362,106 +351,5 @@ class ThemeManagementController extends CrudController
         ]);
     }
 
-    public function deleteAds(Request $request)
-    {
-        // Kiểm tra đầu vào
-        $validator = Validator::make($request->all(), [
-            'ads_header' => 'nullable|string',
-            'ads_catfish' => 'nullable|string',
-            'ads_popup' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors(),
-            ], 422);
-        }
-
-        // Lấy theme đang active
-        $theme = Theme::where('active', 1)->first();
-        if (!$theme) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Active theme not found.',
-            ], 404);
-        }
-
-        $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
-
-        // Hàm xử lý xóa
-        $processAdsRemoval = function ($htmlContent, $imgTag) {
-            $dom = new DOMDocument();
-            libxml_use_internal_errors(true);
-            $dom->loadHTML('<?xml encoding="utf-8" ?>' . $htmlContent);
-
-            $xpath = new DOMXPath($dom);
-        
-            // Trích xuất src từ imgTag payload
-            $imgDom = new DOMDocument();
-            $imgDom->loadHTML('<?xml encoding="utf-8" ?>' . $imgTag);
-            $imgSrcNode = $imgDom->getElementsByTagName('img')->item(0);
-            $imgSrc = $imgSrcNode ? $imgSrcNode->getAttribute('src') : null;
-        
-            if ($imgSrc) {
-                // Tìm tất cả các thẻ <a> chứa thẻ <img> có src khớp với payload
-                $links = $xpath->query('//a[img[contains(@src, "' . $imgSrc . '")]]');
-                foreach ($links as $link) {
-                    // Lưu tham chiếu đến cha của thẻ <a>
-                    $parentDiv = $link->parentNode->parentNode;
-                    $link->parentNode->removeChild($link);
-        
-                    // Kiểm tra nếu cha (và các con) không còn thẻ <a> nào thì xóa
-                    $remainingLinks = $xpath->query('.//a', $parentDiv);
-                    if ($remainingLinks->length === 0) {
-                        $parentDiv->parentNode->removeChild($parentDiv);
-                    }
-                }
-            }
-            // Lấy lại HTML sau khi xử lý
-            $bodyNode = $dom->getElementsByTagName('body')->item(0);
-            $processedHtml = '';
-            if ($bodyNode) {
-                foreach ($bodyNode->childNodes as $childNode) {
-                    $processedHtml .= $dom->saveHTML($childNode);
-                }
-            }
-            return trim($processedHtml);
-        };
-        
-        // Xử lý ads_header
-        if ($request->has('ads_header') && isset($value['ads_header'])) {
-            $adsHeaderImg = $request->input('ads_header');
-            $value['ads_header'] = $processAdsRemoval($value['ads_header'], $adsHeaderImg);
-            if (empty(trim($value['ads_header']))) {
-                unset($value['ads_header']);
-            }
-        }
-
-        // Xử lý ads_catfish
-        if ($request->has('ads_catfish') && isset($value['ads_catfish'])) {
-            $adsCatfishImg = $request->input('ads_catfish');
-            $value['ads_catfish'] = $processAdsRemoval($value['ads_catfish'], $adsCatfishImg);
-        }
-
-        // Xử lý ads_popup
-        if ($request->has('ads_popup') && isset($value['ads_catfish'])) {
-            $adsPopupImg = $request->input('ads_popup');
-            $value['ads_catfish'] = $processAdsRemoval($value['ads_catfish'], $adsPopupImg);
-        }
-
-        if (empty(trim($value['ads_catfish']))) {
-            unset($value['ads_catfish']);
-        }
-
-        // Lưu lại giá trị mới vào theme
-        $theme->value = $value;
-        $theme->save();
-        Artisan::call('optimize:clear');
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Ads deleted successfully.',
-        ]);
-    }
+   
 }

@@ -32,6 +32,9 @@
 
         // Gọi hàm kiểm tra DevTools khi trang tải
     </script>
+
+
+
     @if (Request::is('kichi'))
         <script>
             const adminRoutePrefix = "{{ config('backpack.base.route_prefix') }}";
@@ -61,37 +64,24 @@
 </body>
 <script>
     const popupClosed = sessionStorage.getItem("popupClosed");
-        // Nếu popup chưa bị đóng, hiển thị popup
+    const adsPopup = document.querySelector(".ads_popup");
+    const adsCatfish = document.querySelector(".ads_catfish");
+    // Nếu popup chưa bị đóng, hiển thị popup
+    if (popupClosed === null) {
+        if (adsPopup) {
+            adsPopup.style.display = "block"; // Hiển thị popup
+        }
+        if (adsCatfish) {
+            adsCatfish.style.display = "block";
+        }
+    } else {
+        if (adsPopup) {
+            adsPopup.style.display = "none"; // Hiển thị popup
+        }
+        if (adsCatfish) {
+            adsCatfish.style.display = "none";
+        }
 
-
-           if (popupClosed=='true') {
-               document.querySelector(".ads_popup").style.display = "none"; // ẩn popup
-               document.querySelector(".ads_catfish").style.display = "none";
-           } else {
-               document.querySelector(".ads_popup").style.display = "block"; // Hiển thị popup
-               document.querySelector(".ads_catfish").style.display = "block";
-           }
-
-           if (document.querySelector(".ads_popup") || document.querySelector(".ads_catfish")) {
-       document
-           .querySelector(".banner-preload-close")
-           .addEventListener("click", function () {
-               // Khi người dùng đóng popup, lưu thời gian đóng vào sessionStorage
-               sessionStorage.setItem("popupClosed", "true");
-               document.querySelector(".ads_popup").style.display = "none";
-           });
-           document
-           .querySelector(".catfish-bottom-close")
-           .addEventListener("click", function () {
-               sessionStorage.setItem("popupClosed", "true");
-               document.querySelector(".ads_catfish").style.display = "none";
-           });
-       document
-           .querySelector(".banner_popup")
-           .addEventListener("click", function () {
-               sessionStorage.setItem("popupClosed", "true");
-               document.querySelector(".ads_popup").style.display = "none";
-           });
-       }
-   </script>
+    }
+</script>
 </html>

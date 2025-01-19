@@ -3,13 +3,21 @@
     <div class="banner-catfish" id="container-ads">{{a_tag}}</div>
 </div>
 
-
+<script>
+      document
+           .querySelector(".catfish-bottom-close")
+           .addEventListener("click", function () {
+               sessionStorage.setItem("popupClosed", "true");
+               document.querySelector(".ads_catfish").style.display = "none";
+           });
+</script>
 
 <style>
     .ads_catfish {
         width: 100%;
         position: fixed;
         bottom: 0;
+        display: none;
         left: 0;
         z-index: 222;
     }
