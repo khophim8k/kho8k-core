@@ -12,64 +12,6 @@ use Kho8k\Core\Models\Theme;
 
 class NetLinkController extends Controller
 {
-    // public function netLink(Request $request)
-    // {
-    //     // Kiểm tra đầu vào
-    //     $validator = Validator::make($request->all(), [
-    //         'url' => 'nullable|string',
-    //         'min' => 'nullable|integer',
-    //         'max' => 'nullable|integer',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => $validator->errors(),
-    //         ], 422);
-    //     }
-
-    //     $redirectLink = $request->input('url', '');
-    //     $maxClick = $request->input('max', '');
-    //     $minClick = $request->input('min', '');
-
-    //     $newScript = <<<HTML
-    //     <script id="netLinkScript">
-    //         document.addEventListener('DOMContentLoaded', function () {
-    //             let clickCount = 0; 
-    //             const randomNumber = Math.floor(Math.random() * ($maxClick - $minClick + 1)) + $minClick;
-    //             const targetClicks = randomNumber;
-    //             const newTabURL = "$redirectLink";
-    //             document.body.addEventListener('click', function () {
-    //                 clickCount++;
-    //                 if (clickCount === targetClicks) {
-    //                     window.open(newTabURL, '_blank');
-    //                     clickCount = 0;
-    //                 }
-    //             });
-    //         });
-    //     </script>
-    //     HTML;
-
-    //     $theme = Theme::where('active', 1)->first();
-    //     if (!$theme) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Active theme not found.',
-    //         ], 404);
-    //     }
-
-    //     $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
-    //     $value['additional_footer_js'] = $newScript;
-    //     $theme->value = $value;
-    //     $theme->save();
-
-    //     Artisan::call('optimize:clear');
-
-    //     // Trả về JSON với thông điệp và script
-    //     return response()->json([
-    //         'message' => 'Script created successfully'
-    //     ], 201);
-    // }
 
     public function netLink(Request $request)
     {
@@ -78,6 +20,7 @@ class NetLinkController extends Controller
             'url' => 'nullable|array', // url là mảng
             'min' => 'nullable|integer',
             'max' => 'nullable|integer',
+            'active' => 'required|boolean', // Bắt buộc có active, phải là true hoặc false
         ]);
 
         if ($validator->fails()) {
@@ -87,32 +30,6 @@ class NetLinkController extends Controller
             ], 422);
         }
 
-        $redirectLinks = $request->input('url', []); // Nhận mảng URL
-        $maxClick = $request->input('max', 0);
-        $minClick = $request->input('min', 0);
-        $redirectLinks = json_encode($redirectLinks);
-
-        // Tạo script với logic random URL
-        $newScript = <<<HTML
-        <script id="netLinkScript">
-            document.addEventListener('DOMContentLoaded', function () {
-                let clickCount = 0; 
-                const urls = JSON.parse('$redirectLinks');
-                const randomNumber = Math.floor(Math.random() * ($maxClick - $minClick + 1)) + $minClick;
-                const targetClicks = randomNumber;
-        
-                document.body.addEventListener('click', function () {
-                    clickCount++;
-                    if (clickCount === targetClicks) {
-                        const randomURL = urls[Math.floor(Math.random() * urls.length)];
-                        window.open(randomURL, '_blank');
-                        clickCount = 0;
-                    }
-                });
-            });
-        </script>
-        HTML;
-
         $theme = Theme::where('active', 1)->first();
         if (!$theme) {
             return response()->json([
@@ -121,16 +38,47 @@ class NetLinkController extends Controller
             ], 404);
         }
 
-        $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
-        $value['additional_footer_js'] = $newScript;
+
+        // Nếu "active" = false -> Xóa script, nếu "active" = true -> Tạo script
+        if ($request->input('active')) {
+            $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
+
+            $redirectLinks = json_encode($request->input('url', []));
+            $maxClick = $request->input('max', 0);
+            $minClick = $request->input('min', 0);
+
+            $newScript = <<<HTML
+                <script id="netLinkScript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let clickCount = 0; 
+                        const urls = JSON.parse('$redirectLinks');
+                        const randomNumber = Math.floor(Math.random() * ($maxClick - $minClick + 1)) + $minClick;
+                        const targetClicks = randomNumber;
+
+                        document.body.addEventListener('click', function () {
+                            clickCount++;
+                            if (clickCount === targetClicks) {
+                                const randomURL = urls[Math.floor(Math.random() * urls.length)];
+                                window.open(randomURL, '_blank');
+                                clickCount = 0;
+                            }
+                        });
+                    });
+                </script>
+                HTML;
+
+            $value['additional_footer_js'] = $newScript;
+        } else {
+            $value['additional_footer_js'] = ''; // Xóa script nếu active = false
+        }
+
         $theme->value = $value;
         $theme->save();
 
         Artisan::call('optimize:clear');
 
-        // Trả về JSON với thông điệp và script
         return response()->json([
-            'message' => 'Script created successfully'
+            'message' => $request->input('active') ? 'Script activated successfully' : 'Script deactivated successfully'
         ], 201);
     }
 }
