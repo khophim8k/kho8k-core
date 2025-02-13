@@ -9,5 +9,11 @@
             Delete All Cache
         </a>
         <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'vi']) }}">
+            VN
+        </a>
+        <a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'en']) }}">
+            EN
+        </a>
     </div>
 </li>

@@ -60,3 +60,9 @@ Route::group([
 Route::get('/kichi', function () {
     return view('themes::kichi');
 });
+Route::get('set-locale/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'vi'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('set-locale');
