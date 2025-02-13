@@ -43,6 +43,7 @@ Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => array_merge(
         [
+            \Kho8k\Core\Middleware\SetLocale::class,
             \Kho8k\Core\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -64,5 +65,6 @@ Route::get('set-locale/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'vi'])) {
         session(['locale' => $locale]);
     }
+  
     return redirect()->back();
 })->name('set-locale');
