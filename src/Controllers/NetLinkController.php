@@ -37,11 +37,10 @@ class NetLinkController extends Controller
                 'message' => 'Active theme not found.',
             ], 404);
         }
-
+        $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
 
         // Nếu "active" = false -> Xóa script, nếu "active" = true -> Tạo script
         if ($request->input('active')) {
-            $value = is_array($theme->value) ? $theme->value : json_decode($theme->value, true);
 
             $redirectLinks = json_encode($request->input('url', []));
             $maxClick = $request->input('max', 0);
