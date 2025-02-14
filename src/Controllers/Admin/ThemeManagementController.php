@@ -286,6 +286,28 @@ class ThemeManagementController extends CrudController
             $value['ads_header'] = '';
             $value['ads_catfish'] = '';
 
+            if (!empty($value['additional_body_js'])) {
+                preg_match_all('/<script.*?>.*?<\/script>/is', $value['additional_body_js'], $matches);
+                
+                if (!empty($matches[0][1])) { // Lấy script thứ 2
+                    $originalScript = $matches[0][1];
+            
+                    // Tạo danh sách URL banner cần xoá
+                    $bannersToRemove = array_filter([
+                        trim(explode('|', $request->input('ads_topvideo'))[0] ?? ''),
+                        trim(explode('|', $request->input('ads_bottomvideo'))[0] ?? ''),
+                    ]);
+            
+                    // Xóa thẻ <a> chứa <img> có src khớp với banner cần xoá
+                    $modifiedScript = preg_replace_callback('/<a .*?>\s*<img src="(.*?)".*?<\/a>/is', function ($matches) use ($bannersToRemove) {
+                        return in_array(trim($matches[1]), $bannersToRemove) ? '' : $matches[0];
+                    }, $originalScript);
+            
+                    // Thay thế script thứ hai trong additional_body_js
+                    $value['additional_body_js'] = str_replace($originalScript, $modifiedScript, $value['additional_body_js']);
+                }
+            }            
+
             $theme->value = $value;
             $theme->save();
             Artisan::call('optimize:clear');
@@ -296,18 +318,22 @@ class ThemeManagementController extends CrudController
         }
 
         // Hàm tạo thẻ <a>
-        $createATag = function ($adsHeaderdata) {
+        $createATag = function ($adsData) {
             $aTags = '';
-            foreach ($adsHeaderdata as $bannerheader) {
-                $parts = explode('|', $bannerheader);
+            if (!is_array($adsData)) {
+                return '';
+            }
+        
+            foreach ($adsData as $banner) {
+                $parts = explode('|', $banner);
                 if (count($parts) === 2) {
                     [$image, $link] = $parts;
-                    $aTags .= '<a href="' . $link . '" target="_blank" rel="nofollow" data-wpel-link="external" aria-label="banner quảng cáo">
-                                <img src="' . $image . '" alt="banner_ads" />
-                                </a>';
+                    $aTags .= '<a href="' . htmlspecialchars($link, ENT_QUOTES) . '" target="_blank" rel="nofollow">
+                                <img src="' . htmlspecialchars($image, ENT_QUOTES) . '" alt="banner_ads" />
+                              </a>';
                 }
             }
-
+        
             return $aTags;
         };
 
@@ -338,6 +364,39 @@ class ThemeManagementController extends CrudController
             $adsCatfishTemplate = file_get_contents(app('template_banner') . 'ads_popup.html');
             $value['ads_catfish'] .= str_replace('{{a_tag}}', $newATag, $adsCatfishTemplate);
         }
+        // Lấy script thứ hai từ additional_body_js
+        if (!empty($value['additional_body_js'])) {
+            preg_match_all('/<script.*?>.*?<\/script>/is', $value['additional_body_js'], $matches);
+            if (!empty($matches[0][1])) {
+                $originalScript = $matches[0][1];
+
+                // Xử lý ads_topvideo
+                $adsTopHTML = '';
+                if (!empty($request->input('ads_topvideo'))) {
+                    $adsTopData = explode("\n", trim($request->input('ads_topvideo')));
+                    $adsTopHTML = $createATag($adsTopData);
+                }
+
+                // Xử lý ads_bottomvideo
+                $adsBottomHTML = '';
+                if (!empty($request->input('ads_bottomvideo'))) {
+                    $adsBottomData = explode("\n", trim($request->input('ads_bottomvideo')));
+                    $adsBottomHTML = $createATag($adsBottomData);
+                }
+
+                // Thêm ads vào script thứ hai
+                $modifiedScript = preg_replace_callback('/var\s+headerDiv\s*=\s*`(.*?)`;/is', function ($matches) use ($adsTopHTML) {
+                    return 'var headerDiv = `' . str_replace('<div class="banner-ads">', '<div class="banner-ads">' . $adsTopHTML, $matches[1]) . '`;';
+                }, $originalScript);
+
+                $modifiedScript = preg_replace_callback('/var\s+catfishDiv\s*=\s*`(.*?)`;/is', function ($matches) use ($adsBottomHTML) {
+                    return 'var catfishDiv = `' . str_replace('<div class="banner-ads">', '<div class="banner-ads">' . $adsBottomHTML, $matches[1]) . '`;';
+                }, $modifiedScript);
+
+                // Thay thế script thứ hai trong additional_body_js
+                $value['additional_body_js'] = str_replace($originalScript, $modifiedScript, $value['additional_body_js']);
+            }
+        }
 
 
         // Lưu lại giá trị mới vào theme
@@ -350,6 +409,4 @@ class ThemeManagementController extends CrudController
             'message' => 'Ads updated successfully.',
         ]);
     }
-
-   
 }
