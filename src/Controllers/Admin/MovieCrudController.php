@@ -268,9 +268,9 @@ class MovieCrudController extends CrudController
         CRUD::addField(['name' => 'regions', 'label' => 'Khu vực', 'type' => 'checklist', 'tab' => 'Phân loại']);
         CRUD::addField(['name' => 'directors', 'label' => 'Đạo diễn', 'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
         CRUD::addField(['name' => 'actors', 'label' => 'Diễn viên',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
-        CRUD::addField(['name' => 'tags', 'label' => 'Tags',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
+        CRUD::addField(['name' => 'tags', 'label' => 'Tags',  'type' => 'textarea', 'tab' => 'Phân loại',  'value' => $this->processJsonData()]);
         CRUD::addField(['name' => 'studios', 'label' => 'Studios',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
-
+      
         CRUD::addField([
             'name' => 'episodes',
             'type' => 'view',
@@ -301,6 +301,21 @@ class MovieCrudController extends CrudController
         CRUD::addField(['name' => 'timestamps', 'label' => 'Cập nhật thời gian', 'type' => 'checkbox', 'tab' => 'Cập nhật']);
     }
 
+    private function processJsonData()
+    {
+        // Lấy dữ liệu từ database (nếu đang trong update operation)
+        $entry = $this->crud->getCurrentEntry();
+
+        if ($entry && $entry->tags) {
+            // Xử lý dữ liệu JSON
+
+            $jsonData = json_decode($entry->tags, true);
+            $names = array_column($jsonData, 'name');
+            return implode(', ', $names); // Trả về danh sách tên
+        }
+
+        return ''; // Trả về giá trị mặc định nếu không có dữ liệu
+    }
     public function store(Request $request)
     {
         $this->getTaxonamies($request);
