@@ -9,11 +9,12 @@
             Delete All Cache
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'vi']) }}">
-            VN
+        <a class="dropdown-item" href="{{ backpack_url('quick-action/updateCMS') }}">
+            Update CMS
         </a>
-        <a class="dropdown-item" href="{{ route('set-locale', ['locale' => 'en']) }}">
-            EN
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ backpack_url('quick-action/relink') }}">
+            Relink Storage
         </a>
     </div>
 </li>

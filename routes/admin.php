@@ -37,6 +37,8 @@ Route::group([
     Route::crud('theme', 'ThemeManagementController');
     Route::crud('sitemap', 'SiteMapController');
     Route::get('quick-action/delete-cache', 'QuickActionController@delete_cache');
+    Route::get('quick-action/updateCMS', 'QuickActionController@updateCMS');
+    Route::get('quick-action/relink', 'QuickActionController@reLinkStorage');
 });
 
 Route::group([
