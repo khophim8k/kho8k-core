@@ -334,7 +334,7 @@ class MovieCrudController extends CrudController
     {
         $actors = request('actors', []);
         $directors = request('directors', []);
-        $tags = request('tags', []);
+        $tags = (array) request('tags', []);
         $studios = request('studios', []);
 
         $actor_ids = [];
