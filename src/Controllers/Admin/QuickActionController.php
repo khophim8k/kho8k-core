@@ -55,11 +55,18 @@ class QuickActionController extends Controller
         if (File::exists(public_path('storage'))) {
             File::deleteDirectory(public_path('storage'));
         }
-
         // Tạo symbolic link mới
         Artisan::call('storage:link');
 
         Alert::success("Đã xóa storage và tạo symbolic link lại thành công")->flash();
+        return back();
+    }
+    public function refile()
+    {
+        // Tạo symbolic link mới
+        Artisan::call('backpack:filemanager:install');
+
+        Alert::success("Đã cài filemanager thành công")->flash();
         return back();
     }
 }
