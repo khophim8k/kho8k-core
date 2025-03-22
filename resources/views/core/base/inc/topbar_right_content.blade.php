@@ -17,7 +17,7 @@
             fix lỗi mất hình
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ backpack_url('quick-action/refilemanager') }}">
+        <a class="dropdown-item" href="{{ backpack_url('quick-action/refile') }}">
             Cài filemanager
         </a>
     </div>

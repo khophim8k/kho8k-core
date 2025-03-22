@@ -29,19 +29,26 @@ class QuickActionController extends Controller
      */
     public function updateCMS()
     {
-        $output = [];
-        $return_var = 0;
-        $projectRoot = base_path(); // Get the root path of the project
-        exec("cd $projectRoot && composer update 2>&1", $output, $return_var);
+        // Cấp quyền cho mọi user truy cập vào thư mục public
+        $publicPath = public_path();
+        exec("chmod -R 0777 $publicPath");
 
-        if ($return_var === 0) {
-            Alert::success("Cập nhật CMS thành công")->flash();
-        } else {
-            $error_message = implode("\n", $output);
-            Alert::error("Cập nhật CMS thất bại: " . $error_message)->flash();
+        // Chạy lệnh composer update
+        $process = new \Symfony\Component\Process\Process(['composer', 'update']);
+        $process->setWorkingDirectory(base_path());
+        $process->setTimeout(3600); // Cho phép chạy lâu (1 giờ)
+
+        try {
+            $process->mustRun();
+            $output = $process->getOutput();
+            Alert::success("Composer update thành công")->flash();
+            return back()->with('output', $output);
+        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $exception) {
+            $exitCode = $process->getExitCode();
+            $errorOutput = $process->getErrorOutput();
+            Alert::error("Composer update thất bại")->flash();
+            return response("Command executed with exit code: $exitCode<br><pre>$errorOutput</pre>");
         }
-
-        return back();
     }
 
     /**
@@ -63,10 +70,21 @@ class QuickActionController extends Controller
     }
     public function refile()
     {
-        // Tạo symbolic link mới
-        Artisan::call('backpack:filemanager:install');
+        // Cấp quyền cho mọi user truy cập vào thư mục public
+        $publicPath = public_path();
+        exec("chmod -R 0777 $publicPath");
 
-        Alert::success("Đã cài filemanager thành công")->flash();
+        // Tạo symbolic link mới
+        $process = new \Symfony\Component\Process\Process(['php', 'artisan', 'backpack:filemanager:install']);
+        $process->setWorkingDirectory(base_path());
+
+        try {
+            $process->mustRun();
+            Alert::success("Đã cài filemanager thành công")->flash();
+        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $exception) {
+            Alert::error("Cài filemanager thất bại: " . $exception->getMessage())->flash();
+        }
+
         return back();
     }
 }
